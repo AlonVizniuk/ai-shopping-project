@@ -1,0 +1,11 @@
+.venv/
+.env
+backend/.env
+__pycache__/
+.idea/
+.vscode/
+*.pyc
+mysql-data/
+redis-data/
+.DS_Store
+Thumbs.db
