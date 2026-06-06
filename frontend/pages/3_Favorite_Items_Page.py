@@ -1,10 +1,12 @@
-import requests
 import streamlit as st
+from utils.http_client import get_session
 from utils.flags import FLAG_IMAGES
 
 st.set_page_config(layout="wide")
 
 BASE_URL = "http://127.0.0.1:8000"
+
+session = get_session()
 
 if "token" not in st.session_state:
     st.session_state.token = None
@@ -17,7 +19,7 @@ if not st.session_state.token:
 
 headers = {"Authorization": f"Bearer {st.session_state.token}"}
 
-response = requests.get(f"{BASE_URL}/favorite/", headers=headers)
+response = session.get(f"{BASE_URL}/favorite/", headers=headers)
 
 if response.status_code != 200:
     st.error("Failed to load favorites")
@@ -81,7 +83,7 @@ for row_start in range(0, len(favorites), 5):
                 )
 
                 if st.button("Add to Cart", key=f"fav_cart_{item['id']}"):
-                    cart_response = requests.post(
+                    cart_response = session.post(
                         f"{BASE_URL}/order/item/{item['id']}?quantity={quantity}",
                         headers=headers
                     )
@@ -92,7 +94,7 @@ for row_start in range(0, len(favorites), 5):
                         st.error(cart_response.json().get("detail", "Failed to add item"))
 
                 if st.button("♥ Remove Favorite", key=f"fav_remove_{item['id']}"):
-                    remove_response = requests.delete(
+                    remove_response = session.delete(
                         f"{BASE_URL}/favorite/{item['id']}",
                         headers=headers
                     )

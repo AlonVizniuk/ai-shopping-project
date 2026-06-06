@@ -1,7 +1,11 @@
-import requests
 import streamlit as st
+from utils.http_client import get_session
+
+st.set_page_config(layout="wide")
 
 BASE_URL = "http://127.0.0.1:8000"
+
+session = get_session()
 
 if "token" not in st.session_state:
     st.session_state.token = None
@@ -43,7 +47,7 @@ if prompt:
     with st.chat_message("user"):
         st.write(prompt)
 
-    response = requests.post(
+    response = session.post(
         f"{BASE_URL}/chat/",
         json={"prompt": prompt},
         headers=headers

@@ -23,6 +23,19 @@ The project follows MVC architecture and includes authentication, caching, sessi
 
 ---
 
+# Main Technologies
+
+- FastAPI
+- Streamlit
+- MySQL
+- Redis
+- OpenAI API
+- Scikit-learn
+- Docker
+- JWT Authentication
+
+---
+
 # Setup & Run Instructions
 
 ## 1. Clone Repository
@@ -60,7 +73,10 @@ source .venv/bin/activate
 
 # 4. Install Dependencies
 
+All frontend and backend dependencies are managed through the backend requirements.txt file.
+
 ```bash
+cd backend
 pip install -r requirements.txt
 ```
 
@@ -267,18 +283,24 @@ Benefits:
 
 ## Streamlit Cache (Frontend)
 
-The frontend uses:
-
-```python
-@st.cache_data(ttl=30)
-```
-
+The frontend uses Streamlit's `@st.cache_data(ttl=30)` decorator
 to cache public product data for 30 seconds.
 
 Benefits:
 
 * Reduced API calls
 * Improved frontend performance
+
+Additionally, the frontend uses Streamlit's `@st.cache_resource`
+decorator to cache and reuse a shared HTTP session object across pages.
+
+The cached session is used for communication with the FastAPI backend.
+
+Benefits:
+
+* Reduced repeated session creation
+* Improved frontend resource management
+* Shared reusable HTTP client across the application
 
 ---
 
@@ -304,6 +326,8 @@ Benefits:
 * Docker
 * Redis Insight
 * HeidiSQL
+* Jupyter Notebook
+* Scikit-learn
 
 ---
 
@@ -329,6 +353,40 @@ Defines entities and request/response schemas.
 
 ---
 
+# API Endpoints
+
+## Authentication
+
+- `POST /auth/token`
+
+## Products
+
+- `GET /item/`
+
+## Favorites
+
+- `GET /favorite/`
+- `POST /favorite/{item_id}`
+- `DELETE /favorite/{item_id}`
+
+## Orders
+
+- `GET /order/`
+- `POST /order/add-item`
+- `PUT /order/update-quantity`
+- `DELETE /order/remove-item/{item_id}`
+- `POST /order/purchase`
+
+## AI Assistant
+
+- `POST /chat/`
+
+## Machine Learning
+
+`GET /prediction/future-spending`
+
+---
+
 # Database Tables
 
 * users
@@ -351,6 +409,119 @@ Defines entities and request/response schemas.
 * Responsive grid UI
 * Flag-based product design
 * MVC architecture
+* Machine learning prediction integration
+* Lasso Regression spending prediction model
+* End-to-end ML workflow
+
+---
+
+# Machine Learning Bonus
+
+A supervised machine learning model was integrated into the project in order to predict future user spending behavior.
+The prediction system is fully integrated into both the FastAPI backend and the Streamlit frontend.
+
+## Model Details
+- Problem Type: Regression
+- Model: Lasso Regression
+- Hyperparameter Tuning: GridSearchCV
+- Feature Scaling: StandardScaler
+
+## Features Used
+- Favorite items count
+- Closed orders count
+- Total purchased items
+- Average order value
+- Days since registration
+
+## ML Workflow
+1. Synthetic dataset generation
+2. Data preprocessing and analysis
+3. Correlation analysis
+4. Model training and tuning
+5. Model export using joblib
+6. Backend inference integration
+7. Frontend prediction visualization
+
+## ML API Endpoint
+
+`GET /prediction/future-spending`
+
+## ML Files
+backend/ml/
+
+## Running the ML Training Notebook
+
+The ML training process is documented inside the following Jupyter Notebook:
+
+```text
+backend/ml/user_spending_prediction.ipynb
+```
+
+The notebook includes:
+
+- Dataset loading
+- Data preprocessing
+- Missing values analysis
+- Duplicate rows analysis
+- Exploratory data analysis
+- Correlation analysis
+- Train/test split
+- Feature scaling using StandardScaler
+- Lasso Regression training
+- Hyperparameter tuning using GridSearchCV
+- Model evaluation
+- Model export using joblib
+- Example prediction
+
+To retrain the machine learning model, open the notebook and run all cells from top to bottom.
+
+---
+
+## Dataset Generation
+
+The synthetic dataset is generated using:
+
+```text
+backend/ml/generate_dataset.py
+```
+
+The generated dataset file:
+
+```text
+backend/ml/user_spending_dataset.csv
+```
+
+Each row in the dataset represents a simulated user shopping behavior profile.
+
+The dataset generation logic follows realistic shopping assumptions:
+
+- Users with more favorite items are more likely to spend more in the future
+- Users with more completed orders usually have higher future spending
+- Users who purchased more items are expected to continue spending more
+- Higher average order values increase future spending estimation
+- Users registered for longer periods may have slightly higher spending potential
+
+To regenerate the dataset:
+
+```bash
+cd backend
+python ml/generate_dataset.py
+```
+
+After regenerating the dataset, rerun the notebook:
+
+```text
+backend/ml/user_spending_prediction.ipynb
+```
+
+The notebook will retrain the model and export updated model files:
+
+```text
+backend/ml/user_spending_lasso_model.pkl
+backend/ml/user_spending_scaler.pkl
+```
+
+The FastAPI prediction endpoint automatically uses these exported files for inference.
 
 ---
 
@@ -377,6 +548,13 @@ Defines entities and request/response schemas.
 ## Chat Assistant
 
 ![Chat Assistant](screenshots/chat-page.png)
+
+---
+
+## Future Spending Prediction
+
+![Prediction Page](screenshots/prediction-page.png)
+
 
 ---
 

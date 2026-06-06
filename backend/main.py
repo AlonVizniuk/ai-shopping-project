@@ -6,6 +6,7 @@ from controller.item_controller import router as item_router
 from controller.favorite_controller import router as favorite_router
 from controller.order_controller import router as order_router
 from controller.chat_controller import router as chat_router
+from controller.prediction_controller import router as prediction_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.include_router(item_router)
 app.include_router(favorite_router)
 app.include_router(order_router)
 app.include_router(chat_router)
+app.include_router(prediction_router)
 
 @app.on_event("startup")
 async def startup():

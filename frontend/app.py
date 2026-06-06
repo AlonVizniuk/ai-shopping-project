@@ -1,9 +1,11 @@
-import requests
 import streamlit as st
+from utils.http_client import get_session
+
+st.set_page_config(page_title="World Cup Jersey Store", layout="wide")
 
 BASE_URL = "http://127.0.0.1:8000"
 
-st.set_page_config(page_title="World Cup Jersey Store", layout="wide")
+session = get_session()
 
 if "token" not in st.session_state:
     st.session_state.token = None
@@ -27,7 +29,7 @@ with st.sidebar:
     password = st.text_input("Password", type="password")
 
     if st.button("Login"):
-        response = requests.post(
+        response = session.post(
             f"{BASE_URL}/auth/token",
             data={"username": username, "password": password}
         )
@@ -39,7 +41,7 @@ with st.sidebar:
                 "Authorization": f"Bearer {st.session_state.token}"
             }
 
-            requests.delete(f"{BASE_URL}/chat/", headers=headers)
+            session.delete(f"{BASE_URL}/chat/", headers=headers)
 
             st.session_state.chat_history = []
             st.session_state.prompts_left = 5
@@ -60,7 +62,7 @@ with st.sidebar:
                 "Authorization": f"Bearer {st.session_state.token}"
             }
 
-            requests.delete(f"{BASE_URL}/chat/", headers=headers)
+            session.delete(f"{BASE_URL}/chat/", headers=headers)
 
         st.session_state.token = None
         st.session_state.chat_history = []
@@ -79,7 +81,7 @@ with st.sidebar:
                 "Authorization": f"Bearer {st.session_state.token}"
             }
 
-            response = requests.delete(
+            response = session.delete(
                 f"{BASE_URL}/user/me",
                 headers=headers
             )
@@ -133,7 +135,7 @@ with st.form("register_form"):
                 "password": new_password
             }
 
-            response = requests.post(
+            response = session.post(
                 f"{BASE_URL}/user/",
                 json=user_data
             )

@@ -1,10 +1,12 @@
-import requests
 import streamlit as st
+from utils.http_client import get_session
 from utils.flags import FLAG_IMAGES
 
 st.set_page_config(layout="wide")
 
 BASE_URL = "http://127.0.0.1:8000"
+
+session = get_session()
 
 if "token" not in st.session_state:
     st.session_state.token = None
@@ -19,7 +21,7 @@ headers = {"Authorization": f"Bearer {st.session_state.token}"}
 
 
 def get_order_details(order_id: int):
-    res = requests.get(f"{BASE_URL}/order/{order_id}", headers=headers)
+    res = session.get(f"{BASE_URL}/order/{order_id}", headers=headers)
     return res.json() if res.status_code == 200 else None
 
 
@@ -54,7 +56,9 @@ def show_items_grid(items, editable: bool):
                     st.markdown(f"### {item['name'].title()}")
                     st.write(f"Quantity: {item['quantity']}")
 
-                    item_response = requests.get(f"{BASE_URL}/item/{item['item_id']}")
+                    current_stock = item["quantity"]
+
+                    item_response = session.get(f"{BASE_URL}/item/{item['item_id']}")
 
                     if item_response.status_code == 200:
                         current_item = item_response.json()
@@ -77,7 +81,7 @@ def show_items_grid(items, editable: bool):
                         )
 
                         if st.button("Update Quantity", key=f"update_qty_{item['item_id']}"):
-                            res = requests.put(
+                            res = session.put(
                                 f"{BASE_URL}/order/item/{item['item_id']}/quantity?quantity={new_quantity}",
                                 headers=headers
                             )
@@ -89,7 +93,7 @@ def show_items_grid(items, editable: bool):
                                 st.error(res.json().get("detail", "Failed to update quantity"))
 
                         if st.button("Remove from order", key=f"remove_{item['item_id']}"):
-                            res = requests.delete(
+                            res = session.delete(
                                 f"{BASE_URL}/order/item/{item['item_id']}",
                                 headers=headers
                             )
@@ -101,7 +105,7 @@ def show_items_grid(items, editable: bool):
                                 st.error("Failed to remove item")
 
 
-orders_response = requests.get(f"{BASE_URL}/order/", headers=headers)
+orders_response = session.get(f"{BASE_URL}/order/", headers=headers)
 
 if orders_response.status_code != 200:
     st.error("Failed to load orders")
@@ -133,7 +137,7 @@ if temp_orders:
             show_items_grid(temp_items, editable=True)
 
             if st.button("Purchase Order"):
-                response = requests.put(f"{BASE_URL}/order/purchase", headers=headers)
+                response = session.put(f"{BASE_URL}/order/purchase", headers=headers)
 
                 if response.status_code == 200:
                     st.success("Order purchased successfully")
@@ -142,7 +146,7 @@ if temp_orders:
                     st.error(response.json().get("detail", "Purchase failed"))
 
             if st.button("Delete Pending Order"):
-                response = requests.delete(f"{BASE_URL}/order/temp", headers=headers)
+                response = session.delete(f"{BASE_URL}/order/temp", headers=headers)
 
                 if response.status_code == 200:
                     st.success("Pending order deleted")

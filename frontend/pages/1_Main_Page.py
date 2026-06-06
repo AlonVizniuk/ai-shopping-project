@@ -1,14 +1,16 @@
-import requests
 import streamlit as st
+from utils.http_client import get_session
 from utils.flags import FLAG_IMAGES
 
 st.set_page_config(layout="wide")
 
 BASE_URL = "http://127.0.0.1:8000"
 
+session = get_session()
+
 @st.cache_data(ttl=30)
 def get_cached_items():
-    res = requests.get(f"{BASE_URL}/item/")
+    res = session.get(f"{BASE_URL}/item/")
     return res.json()
 
 if "token" not in st.session_state:
@@ -43,7 +45,7 @@ if st.button("Clear Search"):
     st.session_state.filters_applied = False
 
 if st.session_state.filters_applied:
-    response = requests.get(
+    response = session.get(
         f"{BASE_URL}/item/search/filter",
         params={
             "name": search_name,
@@ -74,7 +76,7 @@ headers = {"Authorization": f"Bearer {st.session_state.token}"} if st.session_st
 favorite_ids = set()
 
 if headers:
-    favorites_response = requests.get(f"{BASE_URL}/favorite/", headers=headers)
+    favorites_response = session.get(f"{BASE_URL}/favorite/", headers=headers)
 
     if favorites_response.status_code == 200:
         favorite_ids = {item["id"] for item in favorites_response.json()}
@@ -137,7 +139,7 @@ for row_start in range(0, len(items), 5):
                     if not headers:
                         st.error("Please login first")
                     else:
-                        cart_response = requests.post(
+                        cart_response = session.post(
                             f"{BASE_URL}/order/item/{item['id']}?quantity={quantity}",
                             headers=headers
                         )
@@ -155,7 +157,7 @@ for row_start in range(0, len(items), 5):
                         st.error("Please login first")
                     else:
                         if is_favorite:
-                            fav_response = requests.delete(
+                            fav_response = session.delete(
                                 f"{BASE_URL}/favorite/{item['id']}",
                                 headers=headers
                             )
@@ -166,7 +168,7 @@ for row_start in range(0, len(items), 5):
                             else:
                                 st.error("Failed to remove favorite")
                         else:
-                            fav_response = requests.post(
+                            fav_response = session.post(
                                 f"{BASE_URL}/favorite/{item['id']}",
                                 headers=headers
                             )
