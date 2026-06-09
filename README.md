@@ -35,14 +35,22 @@ The project focuses on backend logic, authentication, caching, AI integration, p
 - Redis
 - JWT Authentication
 - OpenAI API
-- Scikit-learn
 - Docker
 
 ### Frontend
 
 - Streamlit
 - Requests
+
+### Machine Learning
+
+- Scikit-learn
 - Pandas
+- Jupyter Notebook
+- Lasso Regression
+- GridSearchCV
+- StandardScaler
+- Joblib
 
 ### Tools
 
