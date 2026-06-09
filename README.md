@@ -66,6 +66,7 @@ AI-shopping-project/
 │   ├── ml/
 │   ├── resources/
 │   ├── main.py
+│   ├── docker-compose.yml
 │   └── requirements.txt
 │
 ├── frontend/
@@ -73,7 +74,6 @@ AI-shopping-project/
 │   └── pages/
 │
 ├── screenshots/
-├── docker-compose.yml
 └── README.md
 ```
 
