@@ -1,53 +1,96 @@
 # AI Shopping Project – World Cup Jersey Store
 
-## Overview
+A full-stack eCommerce web application that simulates an online **World Cup 2026 national football jersey store**.
 
-AI Shopping Project is a full-stack eCommerce web application built with:
+Users can browse jerseys, search and filter products, manage favorites, create and purchase orders, chat with an AI shopping assistant, and receive a future spending prediction using a supervised machine learning model.
 
-* FastAPI (Python backend)
-* Streamlit (frontend)
-* MySQL
-* Redis caching
-* OpenAI Assistant integration
-
-The application simulates an online World Cup jersey store where users can:
-
-* Browse jerseys
-* Filter/search products
-* Add products to favorites
-* Create and manage orders
-* Purchase orders
-* Chat with an AI shopping assistant
-
-The project follows MVC architecture and includes authentication, caching, session management, and order handling logic.
+The project focuses on backend logic, authentication, caching, AI integration, persistent order management, stock validation, and ML model inference.
 
 ---
 
-# Main Technologies
+## Main Features
 
+- World Cup 2026 jersey catalog
+- User registration and login
+- JWT authentication
+- Password hashing
+- Product search, filtering, and sorting
+- Favorite jerseys per user
+- TEMP and CLOSE order management
+- Stock validation and inventory updates
+- OpenAI-powered shopping assistant
+- Redis backend caching
+- Streamlit frontend caching
+- ML model for future spending prediction
+
+---
+
+## Tech Stack
+
+### Backend
+
+- Python
 - FastAPI
-- Streamlit
 - MySQL
 - Redis
+- JWT Authentication
 - OpenAI API
 - Scikit-learn
 - Docker
-- JWT Authentication
+
+### Frontend
+
+- Streamlit
+- Requests
+- Pandas
+
+### Tools
+
+- Docker Compose
+- Redis Insight
+- HeidiSQL
+- Jupyter Notebook
 
 ---
 
-# Setup & Run Instructions
+## Project Structure
 
-## 1. Clone Repository
+```text
+AI-shopping-project/
+├── backend/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── model/
+│   ├── config/
+│   ├── ml/
+│   ├── resources/
+│   ├── main.py
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── app.py
+│   └── pages/
+│
+├── screenshots/
+├── docker-compose.yml
+└── README.md
+```
+
+---
+
+## Setup & Run Instructions
+
+### 1. Clone the Repository
 
 ```bash
-git clone <repository_url>
+git clone https://github.com/AlonVizniuk/ai-shopping-project.git
 cd ai-shopping-project
 ```
 
 ---
 
-# 2. Create Virtual Environment
+### 2. Create Virtual Environment
 
 ```bash
 python -m venv .venv
@@ -55,15 +98,15 @@ python -m venv .venv
 
 ---
 
-# 3. Activate Virtual Environment
+### 3. Activate Virtual Environment
 
-## Windows
+#### Windows
 
 ```bash
 .venv\Scripts\activate
 ```
 
-## Mac/Linux
+#### Mac / Linux
 
 ```bash
 source .venv/bin/activate
@@ -71,9 +114,7 @@ source .venv/bin/activate
 
 ---
 
-# 4. Install Dependencies
-
-All frontend and backend dependencies are managed through the backend requirements.txt file.
+### 4. Install Dependencies
 
 ```bash
 cd backend
@@ -82,7 +123,7 @@ pip install -r requirements.txt
 
 ---
 
-# 5. Create `.env` File
+### 5. Create `.env` File
 
 Create a `.env` file inside the `backend` folder:
 
@@ -93,25 +134,20 @@ OPENAI_MODEL=gpt-4.1-mini
 
 ---
 
-# 6. Run Docker Containers
+### 6. Run Docker Containers
 
-The project uses Docker for:
-
-* MySQL database
-* Redis cache
-
-The database tables and initial jersey data are created automatically when the MySQL container starts.
-
-Run:
+The project uses Docker for MySQL and Redis.
 
 ```bash
 cd backend
 docker compose up -d
 ```
 
+The database tables and initial jersey data are created automatically when the MySQL container starts.
+
 ---
 
-# 7. Run Backend
+### 7. Run Backend
 
 Open a new terminal:
 
@@ -126,7 +162,7 @@ Backend URL:
 http://127.0.0.1:8000
 ```
 
-Swagger Documentation:
+Swagger documentation:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -134,7 +170,7 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# 8. Run Frontend
+### 8. Run Frontend
 
 Open another terminal:
 
@@ -151,355 +187,243 @@ http://localhost:8501
 
 ---
 
-# Project Features
+## Store Concept
+
+The website is a **World Cup jersey store**.
+
+Each item represents a national football team jersey for the 2026 World Cup.
+
+Each jersey includes:
+
+- Jersey name
+- Price
+- Stock quantity
+- Country-based visual design
+
+The frontend displays the jerseys in a grid UI with flag banners and product details.
+
+---
 
 ## User System
 
-* User registration
-* User login/logout
-* JWT authentication
-* Delete account
-* Username uniqueness validation
+Users can register, log in, log out, and delete their account.
 
 Each user contains:
 
-* First name
-* Last name
-* Email
-* Phone
-* Country
-* City
-* Username
-* Password (hashed)
+- First name
+- Last name
+- Email
+- Phone
+- Country
+- City
+- Username
+- Hashed password
+
+Passwords are hashed before being saved in the database.
+
+After login, the backend returns a JWT token. The frontend stores the token in Streamlit session state and uses it for protected actions.
 
 ---
 
-# Products System
+## Jersey Catalog
 
-The store contains national football team jerseys for World Cup 2026.
-
-Each product contains:
-
-* Jersey name
-* Price
-* Stock quantity
-
-Features:
-
-* Product grid UI
-* Country flag banners
-* Search by jersey name
-* Price filtering
-* Stock filtering
-* Sorting
-* Out-of-stock handling
-
----
-
-# Favorites System
-
-Authenticated users can:
-
-* Add jerseys to favorites
-* Remove jerseys from favorites
-* View favorite jerseys page
-
-The favorites page displays:
-
-* Flag image
-* Jersey name
-* Price
-* Stock
-
----
-
-# Orders System
-
-Users can manage shopping orders.
-
-## TEMP Orders
-
-* Active pending cart
-* Editable
-* Persistent after logout
-* Only one TEMP order per user
+The main page displays all jerseys from the database.
 
 Users can:
 
-* Add items
-* Remove items
-* Update quantities
-* Purchase order
+- Search by jersey name
+- Filter by price
+- Filter by stock quantity
+- Sort products
+- View out-of-stock jerseys
 
-## CLOSE Orders
-
-* Historical purchased orders
-* Read-only
-* Display full order details
-
-Purchase flow:
-
-* Validates stock
-* Updates inventory
-* Closes order
+The product data is loaded from the FastAPI backend and displayed in Streamlit.
 
 ---
 
-# AI Shopping Assistant
+## Favorites System
 
-The system includes an OpenAI-powered assistant.
+Authenticated users can manage a personal favorite jerseys list.
+
+Users can:
+
+- Add jerseys to favorites
+- Remove jerseys from favorites
+- View favorite jerseys on a dedicated page
+
+Rules:
+
+- Only logged-in users can use favorites
+- Each jersey can appear only once in the same user's favorites list
+- Favorites are saved in MySQL and remain after logout/login
+
+---
+
+## Orders System
+
+The order system supports two statuses:
+
+```text
+TEMP
+CLOSE
+```
+
+### TEMP Order
+
+A TEMP order is the user's active shopping cart.
+
+Rules:
+
+- Each user can have only one TEMP order
+- TEMP orders are editable
+- TEMP orders remain saved after logout
+- Users can add items, remove items, and update quantities
+- If all items are removed, the TEMP order is deleted
+
+### CLOSE Order
+
+A CLOSE order is a completed purchase.
+
+Rules:
+
+- CLOSE orders are read-only
+- Users can view historical order details
+- Closed orders cannot be modified
+
+### Purchase Flow
+
+When a user purchases an order:
+
+1. The backend validates stock availability
+2. The item quantities are deducted from stock
+3. The order status changes from TEMP to CLOSE
+4. The order becomes part of the user's order history
+
+---
+
+## Stock Management
+
+The backend validates inventory before completing purchases.
+
+Stock rules:
+
+- Users cannot purchase more than the available stock
+- Stock is updated only when an order is purchased
+- Out-of-stock jerseys still appear in the store
+- If stock is not available, the user receives an error message
+
+The validation is handled in the backend, not only in the UI.
+
+---
+
+## AI Shopping Assistant
+
+The project includes an OpenAI-powered shopping assistant.
 
 The assistant can:
 
-* Recommend jerseys
-* Explain stock availability
-* Help users navigate the website
-* Answer product-related questions
+- Recommend jerseys
+- Answer product-related questions
+- Explain stock availability
+- Help users navigate the website
+- Respond using the current store catalog
 
-Additional features:
+The assistant is aware of available and out-of-stock jerseys.
 
-* Context-aware product information
-* Website usage guidance
-* Prompt usage limitation per session
+Prompt usage is limited per session using Streamlit session state.
 
 ---
 
-# Caching
+## Caching
 
-## Redis Cache (Backend)
+### Redis Backend Cache
 
-Redis is used for backend caching of products.
+Redis is used to cache public product data.
 
 Cached endpoint:
 
-* `GET /item/`
+```text
+GET /item/
+```
 
-Benefits:
+Cache flow:
 
-* Faster response times
-* Reduced database queries
+```text
+1. Client requests jerseys
+2. Backend checks Redis
+3. If cached data exists, return it
+4. If not, fetch from MySQL
+5. Save result in Redis with TTL
+6. Return data to the client
+```
 
----
-
-## Streamlit Cache (Frontend)
-
-The frontend uses Streamlit's `@st.cache_data(ttl=30)` decorator
-to cache public product data for 30 seconds.
-
-Benefits:
-
-* Reduced API calls
-* Improved frontend performance
-
-Additionally, the frontend uses Streamlit's `@st.cache_resource`
-decorator to cache and reuse a shared HTTP session object across pages.
-
-The cached session is used for communication with the FastAPI backend.
-
-Benefits:
-
-* Reduced repeated session creation
-* Improved frontend resource management
-* Shared reusable HTTP client across the application
+MySQL remains the source of truth. Redis is used only as a temporary cache layer.
 
 ---
 
-# Technologies
+### Streamlit Frontend Cache
 
-## Backend
+The frontend uses Streamlit caching to reduce unnecessary API calls and resource creation.
 
-* Python
-* FastAPI
-* MySQL
-* Redis
-* OpenAI API
-* JWT Authentication
+Used decorators:
 
-## Frontend
+```python
+@st.cache_data(ttl=30)
+@st.cache_resource
+```
 
-* Streamlit
-* Requests
-* Pandas
+Usage:
 
-## Other
+- `@st.cache_data(ttl=30)` caches public product data for 30 seconds
+- `@st.cache_resource` caches and reuses a shared HTTP session object across pages
 
-* Docker
-* Redis Insight
-* HeidiSQL
-* Jupyter Notebook
-* Scikit-learn
+This improves frontend performance and reduces repeated backend calls.
 
 ---
 
-# Architecture
+## Machine Learning Bonus
 
-The backend follows MVC architecture.
+The project includes a supervised ML model that predicts future user spending.
 
-## Controller Layer
+### Model Details
 
-Handles API routes and HTTP requests.
-
-## Service Layer
-
-Contains business logic.
-
-## Repository Layer
-
-Handles database operations.
-
-## Model Layer
-
-Defines entities and request/response schemas.
-
----
-
-# API Endpoints
-
-## Authentication
-
-- `POST /auth/token`
-
-## Products
-
-- `GET /item/`
-
-## Favorites
-
-- `GET /favorite/`
-- `POST /favorite/{item_id}`
-- `DELETE /favorite/{item_id}`
-
-## Orders
-
-- `GET /order/`
-- `POST /order/add-item`
-- `PUT /order/update-quantity`
-- `DELETE /order/remove-item/{item_id}`
-- `POST /order/purchase`
-
-## AI Assistant
-
-- `POST /chat/`
-
-## Machine Learning
-
-`GET /prediction/future-spending`
-
----
-
-# Database Tables
-
-* users
-* items
-* favorite_items
-* orders
-* order_items
-
----
-
-# Project Highlights
-
-* Full-stack architecture
-* JWT authentication
-* Redis caching
-* Streamlit caching
-* OpenAI integration
-* Persistent shopping cart
-* Order management system
-* Responsive grid UI
-* Flag-based product design
-* MVC architecture
-* Machine learning prediction integration
-* Lasso Regression spending prediction model
-* End-to-end ML workflow
-
----
-
-# Machine Learning Bonus
-
-A supervised machine learning model was integrated into the project in order to predict future user spending behavior.
-The prediction system is fully integrated into both the FastAPI backend and the Streamlit frontend.
-
-## Model Details
-- Problem Type: Regression
+- Problem type: Regression
 - Model: Lasso Regression
-- Hyperparameter Tuning: GridSearchCV
-- Feature Scaling: StandardScaler
+- Hyperparameter tuning: GridSearchCV
+- Feature scaling: StandardScaler
 
-## Features Used
+### Features Used
+
 - Favorite items count
 - Closed orders count
 - Total purchased items
 - Average order value
 - Days since registration
 
-## ML Workflow
-1. Synthetic dataset generation
-2. Data preprocessing and analysis
-3. Correlation analysis
-4. Model training and tuning
-5. Model export using joblib
-6. Backend inference integration
-7. Frontend prediction visualization
+### ML Workflow
 
-## ML API Endpoint
+1. Generate synthetic user shopping dataset
+2. Load and analyze the dataset
+3. Check missing values and duplicates
+4. Perform exploratory data analysis
+5. Run correlation analysis
+6. Split data into train/test sets
+7. Scale features with StandardScaler
+8. Train Lasso Regression model
+9. Tune hyperparameters with GridSearchCV
+10. Evaluate the model
+11. Export model and scaler
+12. Use the exported files in FastAPI for inference
 
-`GET /prediction/future-spending`
-
-## ML Files
-backend/ml/
-
-## Running the ML Training Notebook
-
-The ML training process is documented inside the following Jupyter Notebook:
-
-```text
-backend/ml/user_spending_prediction.ipynb
-```
-
-The notebook includes:
-
-- Dataset loading
-- Data preprocessing
-- Missing values analysis
-- Duplicate rows analysis
-- Exploratory data analysis
-- Correlation analysis
-- Train/test split
-- Feature scaling using StandardScaler
-- Lasso Regression training
-- Hyperparameter tuning using GridSearchCV
-- Model evaluation
-- Model export using joblib
-- Example prediction
-
-To retrain the machine learning model, open the notebook and run all cells from top to bottom.
-
----
-
-## Dataset Generation
-
-The synthetic dataset is generated using:
+### ML Files
 
 ```text
 backend/ml/generate_dataset.py
-```
-
-The generated dataset file:
-
-```text
 backend/ml/user_spending_dataset.csv
+backend/ml/user_spending_prediction.ipynb
+backend/ml/user_spending_lasso_model.pkl
+backend/ml/user_spending_scaler.pkl
 ```
-
-Each row in the dataset represents a simulated user shopping behavior profile.
-
-The dataset generation logic follows realistic shopping assumptions:
-
-- Users with more favorite items are more likely to spend more in the future
-- Users with more completed orders usually have higher future spending
-- Users who purchased more items are expected to continue spending more
-- Higher average order values increase future spending estimation
-- Users registered for longer periods may have slightly higher spending potential
 
 To regenerate the dataset:
 
@@ -508,56 +432,142 @@ cd backend
 python ml/generate_dataset.py
 ```
 
-After regenerating the dataset, rerun the notebook:
+To retrain the model, open and run:
 
 ```text
 backend/ml/user_spending_prediction.ipynb
 ```
 
-The notebook will retrain the model and export updated model files:
-
-```text
-backend/ml/user_spending_lasso_model.pkl
-backend/ml/user_spending_scaler.pkl
-```
-
-The FastAPI prediction endpoint automatically uses these exported files for inference.
+The FastAPI backend uses the exported model and scaler files for prediction.
 
 ---
 
-# Screenshots
+## API Endpoints
 
-## Main Page
+### Authentication
+
+```text
+POST /auth/token
+```
+
+### Items
+
+```text
+GET /item/
+```
+
+### Favorites
+
+```text
+GET /favorite/
+POST /favorite/{item_id}
+DELETE /favorite/{item_id}
+```
+
+### Orders
+
+```text
+GET /order/
+POST /order/add-item
+PUT /order/update-quantity
+DELETE /order/remove-item/{item_id}
+POST /order/purchase
+```
+
+### AI Assistant
+
+```text
+POST /chat/
+```
+
+### Machine Learning
+
+```text
+GET /prediction/future-spending
+```
+
+---
+
+## Database Tables
+
+```text
+users
+items
+favorite_items
+orders
+order_items
+```
+
+---
+
+## Architecture
+
+The backend follows MVC architecture.
+
+```text
+Controller → Service → Repository → Database / Cache
+```
+
+### Controller Layer
+
+Handles API routes and HTTP requests.
+
+### Service Layer
+
+Contains business logic, validations, authentication logic, order flow, stock checks, and ML inference logic.
+
+### Repository Layer
+
+Handles MySQL queries and Redis cache operations.
+
+### Model Layer
+
+Defines request, response, and database entities.
+
+---
+
+## Screenshots
+
+### Main Page
 
 ![Main Page](screenshots/main-page.png)
 
----
-
-## Favorites Page
+### Favorites Page
 
 ![Favorites Page](screenshots/favorites-page.png)
 
----
-
-## Orders Page
+### Orders Page
 
 ![Orders Page](screenshots/orders-page.png)
 
----
-
-## Chat Assistant
+### Chat Assistant
 
 ![Chat Assistant](screenshots/chat-page.png)
 
----
-
-## Future Spending Prediction
+### Future Spending Prediction
 
 ![Prediction Page](screenshots/prediction-page.png)
 
+---
+
+## Project Highlights
+
+- Full-stack World Cup jersey store
+- FastAPI backend with MVC architecture
+- Streamlit multipage frontend
+- JWT authentication
+- Password hashing
+- Persistent favorites and orders
+- TEMP/CLOSE order lifecycle
+- Stock validation during purchase
+- Redis caching for product data
+- Streamlit caching for frontend performance
+- OpenAI assistant integration
+- Lasso Regression spending prediction model
+- End-to-end ML workflow integrated into the application
 
 ---
 
-# Author
+## Author
 
 Alon Vizniuk
