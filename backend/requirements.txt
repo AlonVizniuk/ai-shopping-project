@@ -25,3 +25,5 @@ matplotlib
 seaborn
 numpy
 jupyter
+pytest==8.3.5
+pytest-asyncio==0.25.3
