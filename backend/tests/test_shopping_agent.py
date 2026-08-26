@@ -6,18 +6,30 @@ import pytest
 from agent import shopping_agent
 
 
-def response_with_tool_call(call_id="call-1"):
+def response_with_tool_call(call_id="call-1", usage=None):
     call = SimpleNamespace(
         type="function_call",
         name="get_product_details",
         arguments='{"item_id": 1}',
         call_id=call_id,
     )
-    return SimpleNamespace(output=[call], output_text="")
+    return SimpleNamespace(
+        id="resp-tool",
+        status="completed",
+        usage=usage,
+        output=[call],
+        output_text="",
+    )
 
 
-def final_response(text="The item is available."):
-    return SimpleNamespace(output=[], output_text=text)
+def final_response(text="The item is available.", usage=None):
+    return SimpleNamespace(
+        id="resp-final",
+        status="completed",
+        usage=usage,
+        output=[],
+        output_text=text,
+    )
 
 
 @pytest.mark.asyncio
